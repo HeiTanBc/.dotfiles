@@ -16,7 +16,7 @@ call vundle#end()  "Plugin end
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_global_ycm_extra_conf'
 
 " =====================  General config
-colorscheme skull
+colorscheme x
 set history=1000                " Store lots of :cmdline history
 set lazyredraw                  " Don't redraw screen during macros
 set tf                          " Improves redrawing for newer computers
