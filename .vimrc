@@ -26,8 +26,8 @@ set cot=menu                    " Don't show extra info on completions
 set mousemodel=popup
 set spelllang=en_us
 set complete+=kspell
-set colorcolumn=80
-highlight colorcolumn ctermbg=green
+let &colorcolumn=join(range(120,999),",")
+highlight ColorColumn ctermbg=235 guibg=#2c2d27
 
 " Search home directory path on cd. But can't complete.
 set cdpath+=~
@@ -313,4 +313,3 @@ augroup END
 
 hi Visual ctermbg=240
 hi CursorLine ctermbg=240 cterm=none
-
