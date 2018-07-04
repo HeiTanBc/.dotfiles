@@ -1,0 +1,113 @@
+IDA Pro 7.0 with Plugins and BinDiff on MacOSX 10.13.4 (High Sierra)
+Install Xcode
+Open up AppStore app, login with your Apple credentials, search for xcode and install
+$ sudo mkdir -p /Developer/SDKs
+$ sudo ln -s /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk /Developer/SDKs/MacOSX.sdk
+
+Install brew and a few more packages:
+$ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+$ brew install libiconv (mine was https://homebrew.bintray.com/bottles/libiconv-1.15.high_sierra.bottle.tar.gz)
+$ pip install ida-settings idalink
+
+Confirm that LLVM and command line tools have been installed:
+$ gcc --version
+$ xcode-select --install
+
+Confirm that SDK has been installed
+$ xcrun --sdk macosx --show-sdk-path
+
+
+Install IDA Pro
+Download IDA Pro from the links you received in your email after purchasing IDA Pro.
+Double click .app file to install IDA Pro and follow the onscreen instructions; installation path on MacOSX (/Applications/IDA Pro 7.0/ida.app)
+
+Install BinDiff
+Download and install BinDiff from https://www.zynamics.com/software.html
+
+Prepare IDA SDK
+We use IDA SDK in order to write/compile:
+– processor modules
+– input file loader modules
+– plugin modules
+$ cd ~/Documents
+$ unzip idasdk70.zip
+
+$ cp /Applications/IDA\ Pro\ 7.0/ida.app/Contents/MacOS/libida.dylibc ~/Documents/idasdk70/lib/x86_mac_gcc_32/
+
+$ cp /Applications/IDA\ Pro\ 7.0/ida.app/Contents/MacOS/libida64.dylib ~/Documents/idasdk70/lib/x64_mac_gcc_64/
+(old libida64.dylib was 109344 bytes, new copied file is 6097712 bytes)
+
+$ ls -al ~/Documents/idasdk70/lib/x86_mac_gcc_32
+$ ls -al ~/Documents/idasdk70/lib/x64_mac_gcc_64
+//you will notice that libiconv.2.2.0.dylib already exists for both architectures
+
+$ locate libiconv
+$ cp /usr/lib/libiconv.2.4.0.dylib ~/Documents/idasdk70/lib/x86_mac_gcc_32/libiconv.2.2.0.dylib
+
+$ cp /usr/lib/libiconv.2.4.0.dylib ~/Documents/idasdk70/lib/x64_mac_gcc_64/libiconv.2.2.0.dylib
+(old libiconv.2.2.0.dylib was 11144 bytes, new copied file is 2104288 bytes)
+
+$ cp -r /Applications/IDA\ Pro\ 7.0/ida.app/Contents/MacOS/plugins/hexrays_sdk/include/* ~/Documents/idasdk70/include/
+$ cp -r /Applications/IDA\ Pro\ 7.0/ida.app/Contents/MacOS/plugins/hexrays_sdk/plugins/* ~/Documents/idasdk70/plugins/
+$ vi ~/Documents/idasdk70/plugins/makefile
+//remove qwindow (there is only one instance, line 41)
+
+$ vi ~/Documents/idasdk70/plugins/makefile
+//add vds1 vds2 vds3 vds4 vds5 vds6 vds7 in line 36
+
+MacOSX Version Support
+$ export PATH=~/Documents/idasdk70/bin:$PATH
+$ cd ~/Documents/idasdk70
+$ vi allmake.unx
+change lines
+116 ifneq ($(wildcard $(SDKDIR)/MacOSX10.12.sdk/*),)
+117 MACSDK=$(SDKDIR)/MacOSX10.12.sdk
+118 MACSDKVER=1012
+
+to
+
+116 ifneq ($(wildcard $(SDKDIR)/MacOSX10.13.sdk/*),)
+117 MACSDK=$(SDKDIR)/MacOSX10.13.sdk
+118 MACSDKVER=1013
+119 else ifneq ($(wildcard $(SDKDIR)/MacOSX10.12.sdk/*),)
+120 MACSDK=$(SDKDIR)/MacOSX10.12.sdk
+121 MACSDKVER=1012
+
+
+Compiling IDA SDK Shipped Plugins
+$ cd ~/Documents/idasdk70
+$ export __MAC__=1
+$ ./bin/idamake.pl
+$ cd ~/Documents/idasdk70
+$ export __EA64__=0
+$ make
+$ cd ~/Documents/idasdk70/bin/plugins
+
+All the compiled x64 plugins must have been created and stored in that folder
+
+Copy your compiled plugins to the plugins folder (if they are not already there)
+/Applications/IDA\ Pro\ 7.0/ida.app/Contents/MacOS/plugins
+
+Hex-Rays Decompiler Plugins Installation
+Extract your purchased decompilers’ plugins (eg x64_hexarmm.zip and x64_hexx86m.zip)
+$ cp x64_hexarmm/hexarm.dylib /Applications/IDA\ Pro\ 7.0/ida.app/Contents/MacOS/plugins/.
+$ cp x64_hexx86m/hexrays.dylib /Applications/IDA\ Pro\ 7.0/ida.app/Contents/MacOS/plugins/.
+$ cp x64_hexx86m/hexrays.cfg /Applications/IDA\ Pro\ 7.0/ida.app/Contents/MacOS/plugins/.
+
+In IDA open a file of the architecture that you previously installed the decompiler for, then in IDAView-A select a code block and Fn+F5 (on Mac, or just F5 on Windows/Linux); you should see the decompiled output of the selected snippet in a new window.
+
+TILIB Installation (utility to create type libraries for IDA)
+$ unzip tilib70.zip
+$ cp tilib70/mac/* /Applications/IDA\ Pro\ 7.0/ida.app/Contents/MacOS/.
+
+User parselib to generate pattern files and sigmake to create the signature files (using the pattern files as input).
+
+$ cd /Applications/IDA Pro 7.0/ida.app/Contents/MacOS]
+$ ./plb
+$ ./sigmake
+
+FLAIR (Fast Library Identification and Recognition Technology) Installation
+$ unzip flair70.zip
+$ cp flair70/bin/mac/* /Applications/IDA\ Pro\ 7.0/ida.app/Contents/MacOS/.
+
+Happy RE!
