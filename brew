@@ -1,0 +1,6 @@
+brew list
+
+ccat		flac		libao		libogg		mp4v2		python@2	xz
+cmake		gdbm		libcue		libunistring	nasm		readline
+cmus		gettext		libiconv	libvorbis	openssl		sqlite
+faad2		glances		libidn2		mad		python		wget
