@@ -9,11 +9,12 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'xolox/vim-colorscheme-switcher'
 Plugin 'xolox/vim-misc'
+Plugin 'google/vim-jsonnet'
 
 call vundle#end()  "Plugin end
 
 "Extra config vundle
-let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_global_ycm_extra_conf'
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
 
 " =====================  General config
 colorscheme x
@@ -160,11 +161,11 @@ set wildignore+=*.png,*.jpg,*.gif
 set wildignore+=*.a,*.lib,*.so,CVS,vendor/qor,public/system
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*  " Linux/MacOSX
 
-" set list                      " display unprintable characters f12 - switches
-" set listchars=tab:\ ·,eol:¬
-" set listchars+=trail:·
-" set listchars+=extends:»,precedes:«
-" map <silent> <F12> :set invlist<CR>
+ set list                      " display unprintable characters f12 - switches
+ set listchars=tab:\ ·,eol:¬
+ set listchars+=trail:·
+ set listchars+=extends:»,precedes:«
+ map <silent> <F12> :set invlist<CR>
 
 set scrolloff=0         " Start scrolling when we're 8 lines away from margins
 set sidescrolloff=18
